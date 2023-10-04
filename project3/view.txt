@@ -1,0 +1,47 @@
+#include <iostream>
+#include <gtest/gtest.h>
+#include "GamePiece.hpp"
+#include "GameState.hpp"
+
+TEST(CodingRoomsUnitTests, TestDefaultCase)
+{
+    GameState state;
+
+    GamePiece piece1("Hufflepuff", "Wizard", &state);
+    ASSERT_EQ(piece1.GetPower(), 1) << "Incorrect wizard power; one wizard";
+
+    GamePiece piece2(piece1);
+    ASSERT_EQ(piece2.GetPower(), 2) << "Incorrect wizard power for new wizard; two wizards";
+    ASSERT_EQ(piece1.GetPower(), 2) << "Incorrect wizard power for original wizard; two wizards";
+
+    GamePiece piece3("Hufflepuff", "Wizard", &state);
+    ASSERT_EQ(piece3.GetPower(), 3) << "Incorrect wizard power for third wizard (created with parameterized constructor";
+    ASSERT_EQ(piece2.GetPower(), 3) << "Incorrect wizard power for second wizard; three wizards";
+    ASSERT_EQ(piece1.GetPower(), 3) << "Incorrect wizard power for original wizard; three wizards";
+
+    {
+        GamePiece piece4(piece2);
+        GamePiece piece5(piece3);
+
+        ASSERT_EQ(piece5.GetPower(), 5) << "Incorrect wizard power with five wizards.";
+        ASSERT_EQ(piece4.GetPower(), 5) << "Incorrect wizard power with five wizards.";
+        ASSERT_EQ(piece3.GetPower(), 5) << "Incorrect wizard power with five wizards.";
+        ASSERT_EQ(piece2.GetPower(), 5) << "Incorrect wizard power with five wizards.";
+        ASSERT_EQ(piece1.GetPower(), 5) << "Incorrect wizard power with five wizards.";
+    }
+
+    ASSERT_EQ(piece3.GetPower(), 3) << "Incorrect wizard power for three wizards (after two removed; likely problem with destructor)";
+    ASSERT_EQ(piece2.GetPower(), 3) << "Incorrect wizard power for three wizards (after two removed; likely problem with destructor)";
+    ASSERT_EQ(piece1.GetPower(), 3) << "Incorrect wizard power for three wizards (after two removed; likely problem with destructor)";
+
+    GamePiece piece6("Hufflepuff", "Scout", &state);
+
+    ASSERT_EQ(piece3.GetPower(), 3) << "Non-wizard pieces should not affect wizard power.";
+    ASSERT_EQ(piece2.GetPower(), 3) << "Non-wizard pieces should not affect wizard power.";
+    ASSERT_EQ(piece1.GetPower(), 3) << "Non-wizard pieces should not affect wizard power.";
+}
+
+int main(int argc, char **argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
