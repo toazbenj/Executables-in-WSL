@@ -1,3 +1,6 @@
+// Formatter
+// Replaces all mentions of wolverines with insults
+
 #include <iostream>
 #include <string>
 
