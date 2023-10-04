@@ -1,0 +1,42 @@
+std::string text{"first 2021 middle 2020 last"};
+bool is_case_insensitive = false; 
+
+ImprovedReplace(text, "first", "FIRST", &is_case_insensitive);
+ASSERT_EQ(text, "FIRST 2021 middle 2020 last");
+
+ImprovedReplace(text, "last", " end", &is_case_insensitive);
+ASSERT_EQ(text, "FIRST 2021 middle 2020  end");
+
+ImprovedReplace(text, "don't", "can't", &is_case_insensitive);
+ASSERT_EQ(text, "FIRST 2021 middle 2020  end");
+
+ImprovedReplace(text, "E", "Y", &is_case_insensitive);
+ASSERT_EQ(text, "FIRST 2021 middle 2020  end");
+
+ImprovedReplace(text, "##21", "34", &is_case_insensitive);
+ASSERT_EQ(text, "FIRST 34 middle 2020  end");
+
+ImprovedReplace(text, " %i", " MeE", &is_case_insensitive);
+ASSERT_EQ(text, "FIRST 34 MeEddle 2020  end");
+
+is_case_insensitive = true;
+
+ImprovedReplace(text, "###", "ab", &is_case_insensitive);
+ASSERT_EQ(text, "FIRST 34 MeEddle ab0  end");
+
+ImprovedReplace(text, "Ee", "eE", &is_case_insensitive);
+ASSERT_EQ(text, "FIRST 34 MeEddle ab0  end");
+
+ImprovedReplace(text, "mee", "X", &is_case_insensitive);
+ASSERT_EQ(text, "FIRST 34 Xddle ab0  end");
+
+
+
+std::string text{"fnlaieualb?78"};
+bool is_case_insensitive = false; 
+
+ImprovedReplace(text, "?#", "q", &is_case_insensitive);
+ASSERT_EQ(text, "fnlaieualbq8");
+
+ImprovedReplace(text, "aie", "aieou!", &is_case_insensitive);
+ASSERT_EQ(text, "fnlaieou!ualbq8");
